@@ -1,13 +1,14 @@
 #ifndef ___CONFIG___
 #define ___CONFIG___
 
-#ifndef ___DEBUG___
-#define ___DEBUG___
-#endif
+// #ifndef ___DEBUG___
+// #define ___DEBUG___
+// #endif
 
 #define LED_PIN_CONTROL 13
 
 #define POT_PIN A0
+#define FLOATING_PIN A5
 
 // These constraints refers to both buttons and leds pins
 #define PIN_1 0
@@ -17,27 +18,29 @@
 
 #define NPINS 4
 
-#define DIFFICULTY_LEVELS 7
+#define DIFFICULTY_LEVELS 4
 
 typedef enum State {
   GAME_INTRO,
-  GAME_WAIT,
+  GAME_START,
   GAME_SLEEP,
   GAME_MATCH_INIT,
-  GAME_GENERATE_PATTERN,
-  GAME_GUESS_PATTERN,
-  DEFEAT,
-  VICTORY
+  GAME_MATCH_GENERATE_PATTERN,
+  GAME_MATCH_LEDS_OFF,
+  GAME_MATCH_GUESS_PATTERN,
+  GAME_MATCH_COMPLETED,
+  GAME_OVER,
+  GAME_WAIT
 } GameState;
 
 extern GameState game_state;
 
 void setup_config(void);
 
-void turn_leds_on(void);
-void turn_leds_off(void);
-void turn_led_on(byte i);
-void turn_led_off(byte i);
+void leds_turn_on(void);
+void leds_turn_off(void);
+void led_turn_on(byte i);
+void led_turn_off(byte i);
 
 bool is_button_pressed(byte i);
 

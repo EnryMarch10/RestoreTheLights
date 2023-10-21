@@ -47,25 +47,25 @@ void setup_config(void) {
   _init_led(LED_PIN_CONTROL);
 }
 
-void turn_leds_off(void) {
+void leds_turn_off(void) {
   for (byte i = 0; i < NPINS; i++) {
     digitalWrite(leds_pins[i], LOW);
   }
   console_log(F("Leds turned off"));
 }
 
-void turn_leds_on(void) {
+void leds_turn_on(void) {
   for (byte i = 0; i < NPINS; i++) {
     digitalWrite(leds_pins[i], HIGH);
   }
   console_log(F("Leds turned on"));
 }
 
-void turn_led_on(byte i) {
+void led_turn_on(byte i) {
   digitalWrite(leds_pins[i], HIGH);
 }
 
-void turn_led_off(byte i) {
+void led_turn_off(byte i) {
   digitalWrite(leds_pins[i], LOW);
 }
 

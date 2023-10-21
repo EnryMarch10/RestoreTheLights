@@ -7,12 +7,15 @@
 #define ANALOG_VALUES 1024
 #define RESULT(value) ((value) / divisor + 1)
 
+extern void pattern_match(void);
+extern void pattern_unmatch(void);
+
+extern volatile void (*match_result)(void);
+
 static int _compute_divisor(double value);
 
-static const unsigned analog_range = (ANALOG_VALUES / (DIFFICULTY_LEVELS * 2));
-static const unsigned divisor = _compute_divisor((double) ANALOG_VALUES / DIFFICULTY_LEVELS);
-
-// extern volatile void (*match_result)(void);
+static const int analog_range = (ANALOG_VALUES / (DIFFICULTY_LEVELS * 2));
+static const int divisor = _compute_divisor((double) ANALOG_VALUES / DIFFICULTY_LEVELS);
 
 volatile byte pattern[NPINS] = {PIN_1, PIN_2, PIN_3, PIN_4};
 static byte index = 0;
@@ -39,24 +42,24 @@ byte read_difficulty_level(void) {
 }
 
 static void _button_handler(const byte i) {
-  // const unsigned long current_time = millis();
-  // if (current_time - last_button_pressed_time[i] > BOUNCING_TIME) {
-  //   last_button_pressed_time[i] = current_time;
-  //   if (i != pattern[NPINS - index - 1]) {
-  //     match_result = &defeat;
-  //     disable_all_pattern_interrupts();
-  //     console_log(String("Interrupt ") + i + " detected DEFEAT");
-  //     return;
-  //   } else if (index == NPINS - 1) {
-  //     match_result = &victory;
-  //     disable_all_pattern_interrupts();
-  //     console_log(String("Interrupt ") + i + " detected VICTORY");
-  //     return;
-  //   }
-  //   digitalWrite(leds_pins[i], HIGH);
-  //   index++;
-  // }
-  // console_log(String("Button") + (i + 1) + String(" pressed"));
+  const unsigned long current_time = millis();
+  if (current_time - last_button_pressed_time[i] > BOUNCING_TIME) {
+    last_button_pressed_time[i] = current_time;
+    if (i != pattern[NPINS - index - 1]) {
+      match_result = &pattern_unmatch;
+      disable_all_pattern_interrupts();
+      console_log(String("Interrupt ") + i + " detected DEFEAT");
+      return;
+    } else if (index == NPINS - 1) {
+      led_turn_on(i);
+      match_result = &pattern_match;
+      disable_all_pattern_interrupts();
+      console_log(String("Interrupt ") + i + " detected VICTORY");
+      return;
+    }
+    led_turn_on(i);
+    index++;
+  }
 }
 
 void btn1_handler(void) {
