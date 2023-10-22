@@ -10,15 +10,17 @@
 #define MAX_WAIT_TIME 10000
 #define TOGGLE_TIME 300
 
-#define T1 2000
+#define MIN_T1 1000
+#define MAX_T1 3000
 #define MAX_T2 8000
 #define MAX_T3 20000
 #define MIN_T2 1000
 #define MIN_T3 4000
+#define LS_TIME 1000
 
 #define RELOAD_TIME 10000
 
-extern volatile byte pattern[NPINS];
+volatile byte pattern[NPINS] = {PIN_1, PIN_2, PIN_3, PIN_4};
 
 volatile void (*match_result)(void) = NULL;
 
@@ -88,8 +90,10 @@ void match_init(void) {
   _led_control_check_off();
   Serial.println(F("Go!"));
   leds_turn_on();
-  console_log(String("T1 time ") + T1 + " will occur");
-  delay(T1);
+  randomSeed(analogRead(FLOATING_PIN));
+  const long time = random(MIN_T1, MAX_T1 + 1);
+  console_log(String("T1 time ") + time + " will occur");
+  delay(time);
   game_state = GAME_MATCH_GENERATE_PATTERN;
 }
 
@@ -158,7 +162,7 @@ void victory(void) {
 
 void defeat(void) {
   digitalWrite(LED_PIN_CONTROL, HIGH);
-  delay(1000);
+  delay(LS_TIME);
   digitalWrite(LED_PIN_CONTROL, LOW);
   Serial.println(String("Game Over. Final Score: ") + score);
   score = 0;

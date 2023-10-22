@@ -16,6 +16,7 @@
 
 #define BAUD_RATE 115200
 
+// Game state global variable
 GameState game_state = GAME_INTRO;
 
 extern void btn1_handler(void);

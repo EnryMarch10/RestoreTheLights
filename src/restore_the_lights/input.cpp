@@ -10,18 +10,21 @@
 extern void pattern_match(void);
 extern void pattern_unmatch(void);
 
+// function that determines level passed/game over
 extern volatile void (*match_result)(void);
 
 static int _compute_divisor(double value);
 
+// Pattern match utilities
+extern volatile byte pattern[NPINS];
+static unsigned long last_button_pressed_time[NPINS] = {0};
+static byte index = 0;
+
+// Useful to read from analog potentiometer
 static const int analog_range = (ANALOG_VALUES / (DIFFICULTY_LEVELS * 2));
 static const int divisor = _compute_divisor((double) ANALOG_VALUES / DIFFICULTY_LEVELS);
 
-volatile byte pattern[NPINS] = {PIN_1, PIN_2, PIN_3, PIN_4};
-static byte index = 0;
-static unsigned long last_button_pressed_time[NPINS] = {0};
 static unsigned long last_analog_read_time = 0;
-
 static int last_value = -analog_range;
 static int last_result = -1;
 
@@ -48,13 +51,13 @@ static void _button_handler(const byte i) {
     if (i != pattern[NPINS - index - 1]) {
       match_result = &pattern_unmatch;
       disable_all_pattern_interrupts();
-      console_log(String("Interrupt ") + i + " detected DEFEAT");
+      // console_log(String("Interrupt ") + i + " detected DEFEAT");
       return;
     } else if (index == NPINS - 1) {
       led_turn_on(i);
       match_result = &pattern_match;
       disable_all_pattern_interrupts();
-      console_log(String("Interrupt ") + i + " detected VICTORY");
+      // console_log(String("Interrupt ") + i + " detected VICTORY");
       return;
     }
     led_turn_on(i);
@@ -79,7 +82,7 @@ void btn4_handler(void) {
 }
 
 void wakeup_handler(void) {
-  console_log(F("Wakeup interrupt called successfully"));
+  // console_log(F("Wakeup interrupt called successfully"));
   disable_all_wakeup_interrupts();
 }
 
@@ -88,5 +91,5 @@ void clear_pattern_handlers_state(void) {
 }
 
 static int _compute_divisor(double value) {
-  return value - (int) value == 0 ? value : value + 1;
+  return (value - (int) value) == 0 ? value : value + 1;
 }
