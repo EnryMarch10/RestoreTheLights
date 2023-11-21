@@ -1,4 +1,4 @@
-# Assignment \#1 - RestoreTheLights
+# Assignment \#1 - Restore The Lights!
 
 First assignment developed on Arduino using Arduino IDE of [Embedded Systems and IoT - a.y. 2023-2024](https://www.unibo.it/en/teaching/course-unit-catalogue/course-unit/2023/400396) ([Computer Science and Engeneering](https://corsi.unibo.it/1cycle/ComputerScienceEngineering)).
 
@@ -14,7 +14,7 @@ The game board is based on four green leds L1, L2, L3, L4 and a red led LS, four
 
 During a game, the leds L1…L4 are initially all on. Then, after some random time T1, the leds start turning off, one by one in sequence, in some random order, taking some  T2 time. As soon as the last led is turned off, the player must turn on the leds in the reverse order by pressing the corresponding buttons B1…B4, within some time T3. Each button Bi turns on the corresponding led Li. So if the order in which the leds were turned off was for instance 3,1,2,4 (that is: the first led to be turned off was L3, then L1, etc), then the leds must be turned on again in order 4,2,1,3 (that is: first L4, then L2, etc). If the player restores the leds on time, the score - starting from zero - is increased and the game goes on, repeating the sequence, but reducing the times T2 and T3 of some factor F. If the player does not restore the leds on time in the correct order, the red led Ls is turned on for 1 second and the game ends, displaying the score on the serial line. 
 
-### Game detailed behavior  
+### Game Detailed Behavior
 
 In the initial state, all green leds are off but led LS that pulses (fading in and out), waiting for some player to start the game. On the serial line, it must be sent the message “Welcome to the Restore the Light Game. Press Key B1 to Start”. 
 
